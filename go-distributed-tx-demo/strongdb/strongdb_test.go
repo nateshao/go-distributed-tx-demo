@@ -2,8 +2,9 @@ package main
 
 import "testing"
 
-func TestDistributedTx(t *testing.T) {
-	if !distributedTx() {
-		t.Error("distributedTx should return true")
+func TestStrongDBTx(t *testing.T) {
+	tx := &StrongDBTx{}
+	if !tx.DistributedTx() {
+		t.Error("DistributedTx should return true")
 	}
 }

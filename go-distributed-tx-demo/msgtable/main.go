@@ -2,26 +2,35 @@ package main
 
 import "fmt"
 
-// MessageTableDemo 演示本地消息表/事务消息的基本流程
-func main() {
-	fmt.Println("MsgTable Demo: Start")
-	if localTransaction() {
-		writeMessageTable()
-		asyncDeliver()
-	}
-	fmt.Println("MsgTable Demo: End")
+// DistributedTx 定义分布式事务接口
+type DistributedTx interface {
+	LocalTransaction() bool
+	WriteMessageTable()
+	AsyncDeliver()
 }
 
-func localTransaction() bool {
+// MsgTableTx 实现本地消息表事务
+type MsgTableTx struct{}
+
+func (m *MsgTableTx) LocalTransaction() bool {
 	fmt.Println("[MsgTable] 执行本地事务")
-	// 模拟本地事务成功
 	return true
 }
 
-func writeMessageTable() {
+func (m *MsgTableTx) WriteMessageTable() {
 	fmt.Println("[MsgTable] 写入本地消息表")
 }
 
-func asyncDeliver() {
+func (m *MsgTableTx) AsyncDeliver() {
 	fmt.Println("[MsgTable] 异步投递消息")
+}
+
+func main() {
+	fmt.Println("MsgTable Demo: Start")
+	tx := &MsgTableTx{}
+	if tx.LocalTransaction() {
+		tx.WriteMessageTable()
+		tx.AsyncDeliver()
+	}
+	fmt.Println("MsgTable Demo: End")
 }

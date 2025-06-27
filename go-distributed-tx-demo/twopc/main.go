@@ -2,29 +2,36 @@ package main
 
 import "fmt"
 
-// TwoPhaseCommitDemo 演示两阶段提交的基本流程
-func main() {
-	fmt.Println("2PC Demo: Two-Phase Commit Start")
-	// 阶段一：准备
-	if prepare() {
-		// 阶段二：提交
-		commit()
-	} else {
-		rollback()
-	}
-	fmt.Println("2PC Demo: End")
+// DistributedTx 定义分布式事务接口
+type DistributedTx interface {
+	Prepare() bool
+	Commit()
+	Rollback()
 }
 
-func prepare() bool {
-	fmt.Println("[Coordinator] Prepare phase: All participants ready?")
-	// 模拟所有参与者都准备好
+// TwoPhaseCommit 实现2PC事务
+type TwoPhaseCommit struct{}
+
+func (t *TwoPhaseCommit) Prepare() bool {
+	fmt.Println("[2PC] Prepare phase: All participants ready?")
 	return true
 }
 
-func commit() {
-	fmt.Println("[Coordinator] Commit phase: All participants commit.")
+func (t *TwoPhaseCommit) Commit() {
+	fmt.Println("[2PC] Commit phase: All participants commit.")
 }
 
-func rollback() {
-	fmt.Println("[Coordinator] Rollback phase: Transaction aborted.")
+func (t *TwoPhaseCommit) Rollback() {
+	fmt.Println("[2PC] Rollback phase: Transaction aborted.")
+}
+
+func main() {
+	fmt.Println("2PC Demo: Two-Phase Commit Start")
+	tx := &TwoPhaseCommit{}
+	if tx.Prepare() {
+		tx.Commit()
+	} else {
+		tx.Rollback()
+	}
+	fmt.Println("2PC Demo: End")
 }

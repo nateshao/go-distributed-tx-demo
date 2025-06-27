@@ -2,22 +2,11 @@ package main
 
 import "testing"
 
-func TestTry(t *testing.T) {
-	cases := []struct {
-		name string
-		want bool
-	}{
-		{"reserve success", true},
+func TestTCC(t *testing.T) {
+	tx := &TCC{}
+	if !tx.Try() {
+		t.Error("Try should return true")
 	}
-	for _, c := range cases {
-		got := try()
-		if got != c.want {
-			t.Errorf("%s: want %v, got %v", c.name, c.want, got)
-		}
-	}
-}
-
-func TestConfirmAndCancel(t *testing.T) {
-	confirm() // 只需保证不panic
-	cancel()  // 只需保证不panic
+	tx.Confirm() // 只需保证不panic
+	tx.Cancel()  // 只需保证不panic
 }

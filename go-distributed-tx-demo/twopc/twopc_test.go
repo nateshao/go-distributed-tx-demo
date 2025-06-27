@@ -2,22 +2,11 @@ package main
 
 import "testing"
 
-func TestPrepare(t *testing.T) {
-	cases := []struct {
-		name string
-		want bool
-	}{
-		{"all ready", true},
+func TestTwoPhaseCommit(t *testing.T) {
+	tx := &TwoPhaseCommit{}
+	if !tx.Prepare() {
+		t.Error("Prepare should return true")
 	}
-	for _, c := range cases {
-		got := prepare()
-		if got != c.want {
-			t.Errorf("%s: want %v, got %v", c.name, c.want, got)
-		}
-	}
-}
-
-func TestCommitAndRollback(t *testing.T) {
-	commit()   // 只需保证不panic
-	rollback() // 只需保证不panic
+	tx.Commit()   // 只需保证不panic
+	tx.Rollback() // 只需保证不panic
 }
